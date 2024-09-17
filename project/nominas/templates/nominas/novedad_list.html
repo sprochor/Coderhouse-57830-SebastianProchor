@@ -1,0 +1,39 @@
+{% extends 'nominas/base.html' %}
+
+{% block header %}
+Novedades: Registros
+{% endblock header %}
+
+{% block main %}
+    <button>
+        <a href="{% url 'novedad_create' %}">Cargar ausencia</a>
+    </button>
+    <div class="container">
+        {% if object_list %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Empleado</th>
+                        <th>Tipo de Novedad</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Comentarios</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obj in object_list %}
+                        <tr>
+                            <td>{{ obj.empleado }}</td>
+                            <td>{{ obj.get_tipo_novedad_display }}</td>
+                            <td>{{ obj.descripcion }}</td>
+                            <td>{{ obj.fecha }}</td>
+                            <td>{{ obj.comentarios }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay registros.</p>
+        {% endif %}
+    </div>
+{% endblock main %}

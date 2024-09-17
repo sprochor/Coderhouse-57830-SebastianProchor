@@ -1,0 +1,16 @@
+{% extends 'nominas/base.html' %}
+
+{% block header %}
+Liquidaciones: Registro
+{% endblock header %}
+
+{% block main %}
+    <button>
+        <a href="{% url 'liquidacion_create' %}">Nueva Liquidacion</a>
+    </button>
+    {% for object in object_list %}
+        <p> {{ object }}</p>
+    {% empty %}
+    <P>No hay registros.</P>    
+    {% endfor %}
+{% endblock main %}

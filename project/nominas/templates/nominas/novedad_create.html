@@ -1,0 +1,13 @@
+{% extends 'nominas/base.html' %}
+
+{% block header %}
+Novedades: Formulario
+{% endblock header %}
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+{% endblock main %}

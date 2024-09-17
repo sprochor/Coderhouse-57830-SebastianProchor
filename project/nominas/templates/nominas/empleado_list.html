@@ -1,0 +1,54 @@
+{% extends 'nominas/base.html' %}
+
+{% block header %}
+Empleados: Registros
+{% endblock header %}
+
+{% block main %}
+    <button>
+        <a href="{% url 'empleado_create' %}">Nuevo Legajo</a>
+    </button>
+    {% if object_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nro Legajo</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Sexo</th>
+                    <th>Celular</th>
+                    <th>Mail</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Fecha de Ingreso</th>
+                    <th>Fecha de Egreso</th>
+                    <th>Estado</th>
+                    <th>Nacionalidad</th>
+                    <th>Modalidad Contratación</th>
+                    <th>Puesto</th>
+                    <th>Sueldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in object_list %}
+                <tr>
+                    <td>{{ object.nro_legajo }}</td>
+                    <td>{{ object.nombre_empleado }}</td>
+                    <td>{{ object.apellido_empleado }}</td>
+                    <td>{{ object.get_sexo_empleado_display }}</td>
+                    <td>{{ object.celular }}</td>
+                    <td>{{ object.mail }}</td>
+                    <td>{{ object.fecha_de_nacimiento }}</td>
+                    <td>{{ object.fecha_de_ingreso }}</td>
+                    <td>{{ object.fecha_de_egreso }}</td>
+                    <td>{{ object.get_estado_display }}</td>
+                    <td>{{ object.nacionalidad }}</td>
+                    <td>{{ object.get_mod_contratacion_display }}</td>
+                    <td>{{ object.sueldo|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay registros.</p>
+    {% endif %}
+{% endblock main %}
