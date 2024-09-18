@@ -13,5 +13,5 @@ class NovedadForm(forms.ModelForm):
 
 class LiquidacionForm(forms.ModelForm):
     class Meta:
-        model = Liquidacion  
-        fields = "__all__"
+        model = Liquidacion
+        fields = ['empleado', 'periodo', 'fecha_pago']

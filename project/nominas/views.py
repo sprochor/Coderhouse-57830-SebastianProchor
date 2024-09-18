@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Empleado, Liquidacion, Novedad
 from .forms import EmpleadoForm, NovedadForm, LiquidacionForm
+from django.shortcuts import redirect
 
 def index(request):
     return render(request, "nominas/index.html")

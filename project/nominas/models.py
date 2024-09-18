@@ -53,20 +53,47 @@ class Novedad(models.Model):
         return f'Novedad de {self.empleado} - {self.get_tipo_novedad_display()} ({self.fecha})'
     
 class Liquidacion(models.Model):
-    class Estado(models.TextChoices):
-        PENDIENTE = 'PENDIENTE', 'Pendiente'
-        LIQUIDADO = 'LIQUIDADO', 'Liquidado'
-        PAGADO  = 'PAGADO', 'Pagado'
 
-    empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)  
+    empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)
     periodo = models.CharField(max_length=7)  # Ejemplo: "09-2024" (mes y año)
-    fecha_liquidacion = models.DateField(default=date.today)  # Fecha de la liquidación
-    total_horas_extras_50 = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)  # Total de horas extras al 50%
-    total_horas_extras_100 = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)  # Total de horas extras al 100%
-    total_dias_ausencia = models.IntegerField(default=0)  # Total de días de ausencia
+    fecha_liquidacion = models.DateField(default=date.today)
+    total_dias_ausencia = models.IntegerField(default=0)
     total_liquidacion = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     fecha_pago = models.DateField(blank=True, null=True)
-    estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.PENDIENTE)
+
+    def calcular_total_liquidacion(self):
+        # Sueldo diario
+        sueldo_diario = self.empleado.sueldo / 30 if self.empleado.sueldo > 0 else 0
+        
+        # Días de ausencia cargados como "Novedad" para el empleado en el período
+        ausencias = Novedad.objects.filter(
+            empleado=self.empleado,
+            tipo_novedad='AS',
+            fecha__year=int(self.periodo.split('-')[1]),
+            fecha__month=int(self.periodo.split('-')[0])
+        ).count()
+
+        # Calcula el total descontando los días de ausencia
+        total = (30 - ausencias) * sueldo_diario if sueldo_diario > 0 else 0
+        return total
+
+    def save(self, *args, **kwargs):
+        # Calculamos la liquidación antes de guardarla
+        self.total_liquidacion = self.calcular_total_liquidacion()
+        # Guardamos el total de ausencias en el campo correspondiente
+        self.total_dias_ausencia = Novedad.objects.filter(
+            empleado=self.empleado,
+            tipo_novedad='AS',
+            fecha__year=int(self.periodo.split('-')[1]),
+            fecha__month=int(self.periodo.split('-')[0])
+        ).count()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Liquidación {self.periodo} - {self.empleado.nombre_empleado} {self.empleado.apellido_empleado} (Legajo: {self.empleado.nro_legajo})'
+        sueldo_diario = self.empleado.sueldo / 30 if self.empleado.sueldo > 0 else 0
+        sueldo_neto = self.total_liquidacion
+        return (
+            f'Liquidación {self.periodo} - {self.empleado.nombre_empleado} {self.empleado.apellido_empleado} '
+            f'(Legajo: {self.empleado.nro_legajo}) - Días trabajados: 30 - Sueldo bruto: {self.empleado.sueldo:.2f} - '
+            f'Ausencias: {self.total_dias_ausencia} - Sueldo neto: {sueldo_neto:.2f}'
+        )
