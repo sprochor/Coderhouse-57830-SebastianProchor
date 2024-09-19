@@ -4,7 +4,7 @@ from .forms import EmpleadoForm, NovedadForm, LiquidacionForm
 from django.shortcuts import redirect
 
 def index(request):
-    return render(request, "nominas/index.html")
+    return render(request, "core/index.html")
 
 def empleado_list(request):
     query = Empleado.objects.all()

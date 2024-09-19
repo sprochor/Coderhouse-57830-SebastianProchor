@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from decimal import Decimal
 
 class Empleado(models.Model):
     SEXO_CHOICES = [
@@ -73,9 +74,18 @@ class Liquidacion(models.Model):
             fecha__month=int(self.periodo.split('-')[0])
         ).count()
 
-        # Calcula el total descontando los días de ausencia
-        total = (30 - ausencias) * sueldo_diario if sueldo_diario > 0 else 0
-        return total
+        # Calcula el sueldo bruto descontando los días de ausencia
+        sueldo_bruto = (30 - ausencias) * sueldo_diario if sueldo_diario > 0 else 0
+
+        # Aplicar descuentos
+        jubilacion = sueldo_bruto * Decimal('0.11')  # 11% de descuento para jubilación
+        ley_19032 = sueldo_bruto * Decimal('0.03')  # 3% para ley 19032
+        obra_social = sueldo_bruto * Decimal('0.03')  # 3% para obra social
+
+        # Sueldo neto después de los descuentos
+        sueldo_neto = sueldo_bruto - (jubilacion + ley_19032 + obra_social)
+
+        return sueldo_neto
 
     def save(self, *args, **kwargs):
         # Calculamos la liquidación antes de guardarla
@@ -94,6 +104,6 @@ class Liquidacion(models.Model):
         sueldo_neto = self.total_liquidacion
         return (
             f'Liquidación {self.periodo} - {self.empleado.nombre_empleado} {self.empleado.apellido_empleado} '
-            f'(Legajo: {self.empleado.nro_legajo}) - Días trabajados: 30 - Sueldo bruto: {self.empleado.sueldo:.2f} - '
+            f'(Legajo: {self.empleado.nro_legajo}) - Días trabajados: {30 - self.total_dias_ausencia} - Sueldo bruto: {self.empleado.sueldo:.2f} - '
             f'Ausencias: {self.total_dias_ausencia} - Sueldo neto: {sueldo_neto:.2f}'
         )
