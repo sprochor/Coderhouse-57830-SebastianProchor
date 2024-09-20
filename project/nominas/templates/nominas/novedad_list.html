@@ -5,6 +5,10 @@ Novedades: Registros
 {% endblock header %}
 
 {% block main %}
+    <form action="{% url 'novedad_list' %}" method="get">
+        <input type="text" name="q" placeholder="Buscar...">
+        <button type="submit">Buscar</button>
+    </form>
     <button>
         <a href="{% url 'novedad_create' %}">Cargar ausencia</a>
     </button>

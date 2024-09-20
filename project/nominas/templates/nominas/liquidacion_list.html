@@ -5,6 +5,10 @@ Liquidaciones: Registro
 {% endblock header %}
 
 {% block main %}
+    <form action="{% url 'liquidacion_list' %}" method="get">
+        <input type="text" name="q" placeholder="Buscar...">
+        <button type="submit">Buscar</button>
+    </form>
     <button>
         <a href="{% url 'liquidacion_create' %}">Nueva Liquidacion</a>
     </button>

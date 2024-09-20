@@ -5,6 +5,10 @@ Empleados: Registros
 {% endblock header %}
 
 {% block main %}
+    <form action="{% url 'empleado_list' %}" method="get">
+        <input type="text" name="q" placeholder="Buscar...">
+        <button type="submit">Buscar</button>
+    </form>
     <button>
         <a href="{% url 'empleado_create' %}">Nuevo Legajo</a>
     </button>

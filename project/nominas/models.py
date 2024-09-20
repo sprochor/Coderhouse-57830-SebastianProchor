@@ -60,7 +60,7 @@ class Liquidacion(models.Model):
     fecha_liquidacion = models.DateField(default=date.today)
     total_dias_ausencia = models.IntegerField(default=0)
     total_liquidacion = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    fecha_pago = models.DateField(blank=True, null=True)
+    fecha_pago = models.DateField()
 
     def calcular_total_liquidacion(self):
         # Sueldo diario
