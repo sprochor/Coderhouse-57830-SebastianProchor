@@ -16,6 +16,7 @@ Empleados: Registros
        {% for object in object_list %}
             <li>{{ object.nro_legajo }}, {{ object.nombre_empleado }}, {{ object.apellido_empleado }}
                 <a href="{% url 'empleado_detail' object.nro_legajo %}">Ver Legajo</a>
+                <a href="{% url 'empleado_update' object.nro_legajo %}">Modificar</a>
             </li>
     {% empty %}
         <p>No hay registros.</p>

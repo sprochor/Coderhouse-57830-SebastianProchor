@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Liquidación de Empleado: Detalle
+{% endblock header %}
+
+{% block main %}
+    <ul>
+        <li>Número de Legajo: {{ object.empleado.nro_legajo }}</li>
+        <li>Nombre: {{ object.empleado.nombre_empleado }}</li>
+        <li>Apellido: {{ object.empleado.apellido_empleado }}</li>
+        <li>Periodo: {{ object.periodo }}</li>
+        <li>Total Días de Ausencia: {{ object.total_dias_ausencia }}</li>
+        <li>Total Liquidación (Sueldo Neto): ${{ object.total_liquidacion|floatformat:2 }}</li> <!-- Mostrar el sueldo con dos decimales -->
+        <li>Fecha de Pago: {{ object.fecha_pago }}</li>
+    </ul>
+    <button>
+        <a href="{% url 'liquidacion_list' %}">Volver</a>
+    </button>
+{% endblock main %}

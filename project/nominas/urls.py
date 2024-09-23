@@ -10,4 +10,7 @@ urlpatterns = [
     path("novedad/create", views.novedad_create, name="novedad_create"),
     path("liquidacion/create", views.liquidacion_create, name="liquidacion_create"),
     path('empleado/detail/<int:pk>', views.empleado_detail, name="empleado_detail"),
+    path('liquidacion/detail/<int:pk>', views.liquidacion_detail, name="liquidacion_detail"),    
+    path('empleado/update/<int:pk>', views.empleado_update, name="empleado_update"),
+    path('liquidacion/update/<int:pk>', views.liquidacion_update, name="liquidacion_update"),  
 ]

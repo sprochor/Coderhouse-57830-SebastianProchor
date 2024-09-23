@@ -6,9 +6,21 @@ Empleados: Vista de Legajo
 
 {% block main %}
     <ul>
-        <li>Numero de Legajo: {{ object.nro_legajo }}</li>
+        <li>Número de Legajo: {{ object.nro_legajo }}</li>
         <li>Nombre: {{ object.nombre_empleado }}</li>
         <li>Apellido: {{ object.apellido_empleado }}</li>
+        <li>DNI: {{ object.dni }}</li>
+        <li>Sexo: {{ object.get_sexo_empleado_display }}</li> <!-- Usar get_*_display para mostrar el valor elegido -->
+        <li>Celular: {{ object.celular }}</li>
+        <li>Email: {{ object.mail }}</li>
+        <li>Fecha de Nacimiento: {{ object.fecha_de_nacimiento }}</li>
+        <li>Fecha de Ingreso: {{ object.fecha_de_ingreso }}</li>
+        <li>Fecha de Egreso: {{ object.fecha_de_egreso }}</li>
+        <li>Estado: {{ object.get_estado_display }}</li>
+        <li>Nacionalidad: {{ object.nacionalidad }}</li>
+        <li>Modalidad de Contratación: {{ object.get_mod_contratacion_display }}</li>
+        <li>Puesto: {{ object.puesto }}</li>
+        <li>Sueldo: {{ object.sueldo|floatformat:2 }}</li> <!-- Mostrar sueldo con dos decimales -->
     </ul>
     <button>
         <a href="{% url 'empleado_list' %}">Volver</a>

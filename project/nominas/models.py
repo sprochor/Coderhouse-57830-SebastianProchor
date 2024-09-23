@@ -25,7 +25,7 @@ class Empleado(models.Model):
     sexo_empleado = models.CharField(max_length=1, choices=SEXO_CHOICES)  # Elección entre Masculino y Femenino
     celular = models.CharField(max_length=30, blank=True, null=True)
     mail = models.CharField(max_length=50, blank=True, null=True)
-    fecha_de_nacimiento = models.DateField()
+    fecha_de_nacimiento = models.DateField(auto_now_add=False, auto_now=False, verbose_name='Fecha de Nacimiento')
     fecha_de_ingreso = models.DateField()
     fecha_de_egreso = models.DateField(blank=True, null=True)
     estado = models.CharField(max_length=1, choices=ESTADO_CHOICES)  # Elección entre Activo y Pasivo
@@ -33,6 +33,14 @@ class Empleado(models.Model):
     mod_contratacion = models.CharField(max_length=1, choices=MOD_CONTRATACION_CHOICES, blank=True, null=True)  # Elección entre Temporal y Permanente
     puesto = models.CharField(max_length=100)
     sueldo = models.DecimalField(max_digits=10, decimal_places=2)  # Sueldo en formato de moneda
+
+    def clean(self):
+        if self.fecha_de_egreso and self.fecha_de_ingreso > self.fecha_de_egreso:
+            raise ValidationError('La fecha de ingreso no puede ser posterior a la fecha de egreso.')
+        return super().clean()
+    
+    def get_fecha_de_nacimiento_display(self):
+        return self.fecha_de_nacimiento.strftime("%d/%m/%Y")
 
     def __str__(self):
         return f'{self.nombre_empleado} {self.apellido_empleado} (Legajo: {self.nro_legajo}) - {self.puesto}'

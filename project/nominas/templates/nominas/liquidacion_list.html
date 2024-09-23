@@ -12,11 +12,15 @@ Liquidaciones: Registro
     <button>
         <a href="{% url 'liquidacion_create' %}">Nueva Liquidacion</a>
     </button>
-    {% for object in object_list %}
-        <p> {{ object }}
-            <a href="#">Recibo</a>
-        </p>
-    {% empty %}
-    <P>No hay registros.</P>    
-    {% endfor %}
+
+    <ul>
+        {% for object in object_list %}
+            <li>{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.periodo }} 
+                <a href="{% url 'liquidacion_detail' object.id %}">Ver Liquidacion</a>
+                <a href="{% url 'liquidacion_update' object.id %}">Modificar</a>
+            </li>
+        {% empty %}
+            <p>No hay registros.</p>
+        {% endfor %}
+    </ul>
 {% endblock main %}

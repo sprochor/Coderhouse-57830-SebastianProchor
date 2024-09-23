@@ -7,18 +7,16 @@ class EmpleadoForm(forms.ModelForm):
     class Meta:
         model = Empleado
         fields = "__all__"
-        widgets = {
-            'fecha_de_nacimiento': forms.DateInput(attrs={'type': 'date'}),
-            'fecha_de_ingreso': forms.DateInput(attrs={'type': 'date'}),
-            'fecha_de_egreso': forms.DateInput(attrs={'type': 'date'})
-        }
     
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
-        # Verificar si ya existe un empleado con el mismo DNI
-        if Empleado.objects.filter(dni=dni).exists():
+        pk = self.instance.pk  # Obtiene el ID del empleado que se está actualizando
+        
+        # Verifica si existe otro empleado con el mismo DNI, excluyendo el actual
+        if Empleado.objects.exclude(pk=pk).filter(dni=dni).exists():
             raise ValidationError(f'Ya existe un legajo para un empleado con el DNI {dni}.')
-        return dni   
+        
+        return dni 
 
 class NovedadForm(forms.ModelForm):  
     class Meta:
@@ -45,6 +43,9 @@ class LiquidacionForm(forms.ModelForm):
         cleaned_data = super().clean()
         empleado = cleaned_data.get('empleado')
         periodo = cleaned_data.get('periodo')
+
+        if empleado.fecha_de_egreso and empleado.fecha_de_egreso < periodo:
+            raise ValidationError(f'El empleado {empleado} ya no estaba activo en el periodo {periodo}.')
 
         if Liquidacion.objects.filter(empleado=empleado, periodo=periodo).exists():
             raise ValidationError(f'Ya existe una liquidación para {empleado} en el periodo {periodo}.')

@@ -50,6 +50,11 @@ def liquidacion_list(request):
     context = {"object_list": novedades}
     return render(request, "nominas/liquidacion_list.html", context)
 
+def liquidacion_detail(request, pk: int):
+    query = Liquidacion.objects.get(id=pk)
+    context = {'object': query}
+    return render(request, 'nominas/liquidacion_detail.html', context)
+
 def empleado_create(request):
     if request.method == "GET":
         form = EmpleadoForm()
@@ -58,7 +63,7 @@ def empleado_create(request):
         if form.is_valid():
             form.save()
             return redirect("empleado_list")
-    return render(request, "nominas/empleado_create.html", {"form": form})
+    return render(request, "nominas/empleado_form.html", {"form": form})
 
 def novedad_create(request):
     if request.method == "GET":
@@ -68,7 +73,7 @@ def novedad_create(request):
         if form.is_valid():
             form.save()
             return redirect("novedad_list")
-    return render(request, "nominas/novedad_create.html", {"form": form})
+    return render(request, "nominas/novedad_form.html", {"form": form})
 
 def liquidacion_create(request):
     if request.method == "GET":
@@ -78,4 +83,26 @@ def liquidacion_create(request):
         if form.is_valid():
             form.save()
             return redirect("liquidacion_list")
-    return render(request, "nominas/liquidacion_create.html", {"form": form})
+    return render(request, "nominas/liquidacion_form.html", {"form": form})
+
+def empleado_update(request, pk: int):
+    query = Empleado.objects.get(nro_legajo=pk)
+    if request.method == "GET":
+        form = EmpleadoForm(instance=query)
+    if request.method == "POST":
+        form = EmpleadoForm(request.POST, instance=query)
+        if form.is_valid():
+            form.save()
+            return redirect("empleado_list")
+    return render(request, "nominas/empleado_form.html", {"form": form})
+
+def liquidacion_update(request, pk: int):
+    query = Liquidacion.objects.get(id=pk)
+    if request.method == "GET":
+        form = LiquidacionForm(instance=query)
+    if request.method == "POST":
+        form = LiquidacionForm(request.POST, instance=query)
+        if form.is_valid():
+            form.save()
+            return redirect("liquidacion_list")
+    return render(request, "nominas/liquidacion_form.html", {"form": form})
