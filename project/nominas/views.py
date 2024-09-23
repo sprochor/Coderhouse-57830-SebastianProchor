@@ -19,6 +19,11 @@ def empleado_list(request):
     context = {"object_list": empleados}
     return render(request, "nominas/empleado_list.html", context)
 
+def empleado_detail(request, pk: int):
+    query = Empleado.objects.get(nro_legajo=pk)
+    context = {'object': query}
+    return render(request, 'nominas/empleado_detail.html', context)
+
 def novedad_list(request):
     query = request.GET.get("q")
     

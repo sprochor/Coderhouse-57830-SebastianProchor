@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Empleados: Vista de Legajo
+{% endblock header %}
+
+{% block main %}
+    <ul>
+        <li>Numero de Legajo: {{ object.nro_legajo }}</li>
+        <li>Nombre: {{ object.nombre_empleado }}</li>
+        <li>Apellido: {{ object.apellido_empleado }}</li>
+    </ul>
+    <button>
+        <a href="{% url 'empleado_list' %}">Volver</a>
+    </button>
+{% endblock main %}

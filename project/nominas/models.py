@@ -21,6 +21,7 @@ class Empleado(models.Model):
     nro_legajo = models.AutoField(primary_key=True)
     nombre_empleado = models.CharField(max_length=50)
     apellido_empleado = models.CharField(max_length=50)
+    dni = models.CharField(max_length=8)
     sexo_empleado = models.CharField(max_length=1, choices=SEXO_CHOICES)  # Elección entre Masculino y Femenino
     celular = models.CharField(max_length=30, blank=True, null=True)
     mail = models.CharField(max_length=50, blank=True, null=True)

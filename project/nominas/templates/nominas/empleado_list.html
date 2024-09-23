@@ -8,51 +8,17 @@ Empleados: Registros
     <form action="{% url 'empleado_list' %}" method="get">
         <input type="text" name="q" placeholder="Buscar...">
         <button type="submit">Buscar</button>
+        <button>
+            <a href="{% url 'empleado_create' %}">Nuevo Legajo</a>
+        </button>
     </form>
-    <button>
-        <a href="{% url 'empleado_create' %}">Nuevo Legajo</a>
-    </button>
-    {% if object_list %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nro Legajo</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Sexo</th>
-                    <th>Celular</th>
-                    <th>Mail</th>
-                    <th>Fecha de Nacimiento</th>
-                    <th>Fecha de Ingreso</th>
-                    <th>Fecha de Egreso</th>
-                    <th>Estado</th>
-                    <th>Nacionalidad</th>
-                    <th>Modalidad Contratación</th>
-                    <th>Puesto</th>
-                    <th>Sueldo</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for object in object_list %}
-                <tr>
-                    <td>{{ object.nro_legajo }}</td>
-                    <td>{{ object.nombre_empleado }}</td>
-                    <td>{{ object.apellido_empleado }}</td>
-                    <td>{{ object.get_sexo_empleado_display }}</td>
-                    <td>{{ object.celular }}</td>
-                    <td>{{ object.mail }}</td>
-                    <td>{{ object.fecha_de_nacimiento }}</td>
-                    <td>{{ object.fecha_de_ingreso }}</td>
-                    <td>{{ object.fecha_de_egreso }}</td>
-                    <td>{{ object.get_estado_display }}</td>
-                    <td>{{ object.nacionalidad }}</td>
-                    <td>{{ object.get_mod_contratacion_display }}</td>
-                    <td>{{ object.sueldo|floatformat:2 }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
+    <ul>
+       {% for object in object_list %}
+            <li>{{ object.nro_legajo }}, {{ object.nombre_empleado }}, {{ object.apellido_empleado }}
+                <a href="{% url 'empleado_detail' object.nro_legajo %}">Ver Legajo</a>
+            </li>
+    {% empty %}
         <p>No hay registros.</p>
-    {% endif %}
+    {% endfor %}
+    <ul>
 {% endblock main %}
