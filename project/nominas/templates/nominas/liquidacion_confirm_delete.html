@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Empleados: Eliminar Liquidacion
+{% endblock header %}
+
+{% block main %}
+    <p>Esta seguro que desea eliminar esta liquidacion "{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.periodo }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmo</button> 
+    </form>
+    <button>
+        <a href="{% url 'empleado_list' %}">Volver</a>
+    </button>
+{% endblock main %}

@@ -106,3 +106,40 @@ def liquidacion_update(request, pk: int):
             form.save()
             return redirect("liquidacion_list")
     return render(request, "nominas/liquidacion_form.html", {"form": form})
+
+def empleado_delete(request, pk: int):
+    query = Empleado.objects.get(nro_legajo=pk)
+    if request.method == "POST":
+        query.delete()
+        return redirect("empleado_list")
+    return render(request, 'nominas/empleado_confirm_delete.html', {'object':query})
+
+def liquidacion_delete(request, pk: int):
+    query = Liquidacion.objects.get(id=pk)
+    if request.method == "POST":
+        query.delete()
+        return redirect("liquidacion_list")
+    return render(request, 'nominas/liquidacion_confirm_delete.html', {'object':query})
+
+def novedad_update(request, pk: int):
+    query = Novedad.objects.get(id=pk)
+    if request.method == "GET":
+        form = NovedadForm(instance=query)
+    if request.method == "POST":
+        form = NovedadForm(request.POST, instance=query)
+        if form.is_valid():
+            form.save()
+            return redirect("novedad_list")
+    return render(request, "nominas/novedad_form.html", {"form": form})
+
+def novedad_delete(request, pk: int):
+    query = Novedad.objects.get(id=pk)
+    if request.method == "POST":
+        query.delete()
+        return redirect("liquidacion_list")
+    return render(request, 'nominas/novedad_confirm_delete.html', {'object':query})
+
+def novedad_detail(request, pk: int):
+    query = Novedad.objects.get(id=pk)
+    context = {'object': query}
+    return render(request, 'nominas/novedad_detail.html', context)

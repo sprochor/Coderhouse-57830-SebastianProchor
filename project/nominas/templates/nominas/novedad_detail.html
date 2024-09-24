@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Novedad de Empleado: Detalle
+{% endblock header %}
+
+{% block main %}
+    <ul>
+        <li>Número de Legajo: {{ object.empleado.nro_legajo }}</li>
+        <li>Nombre: {{ object.empleado.nombre_empleado }}</li>
+        <li>Apellido: {{ object.empleado.apellido_empleado }}</li>
+        <li>Tipo de novedad: {{ object.get_tipo_novedad_display }}</li>
+        <li>Descripcion: {{ object.descripcion }}</li>
+        <li>Fecha: {{ object.fecha }}</li>
+        <li>Comentarios: {{ object.comentarios }}</li>
+    </ul>
+    <button>
+        <a href="{% url 'novedad_list' %}">Volver</a>
+    </button>
+{% endblock main %}

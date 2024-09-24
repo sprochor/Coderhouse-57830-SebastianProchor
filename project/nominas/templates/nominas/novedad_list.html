@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 
 {% block header %}
-Novedades: Registros
+Novedad: Registro
 {% endblock header %}
 
 {% block main %}
@@ -10,34 +10,20 @@ Novedades: Registros
         <button type="submit">Buscar</button>
     </form>
     <button>
-        <a href="{% url 'novedad_create' %}">Cargar ausencia</a>
+        <a href="{% url 'novedad_create' %}" style="text-decoration:none;">
+            <button type="button">Nueva novedad</button>
+        </a>
     </button>
-    <div class="container">
-        {% if object_list %}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Empleado</th>
-                        <th>Tipo de Novedad</th>
-                        <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Comentarios</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for obj in object_list %}
-                        <tr>
-                            <td>{{ obj.empleado }}</td>
-                            <td>{{ obj.get_tipo_novedad_display }}</td>
-                            <td>{{ obj.descripcion }}</td>
-                            <td>{{ obj.fecha }}</td>
-                            <td>{{ obj.comentarios }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
+
+    <ul>
+        {% for object in object_list %}
+            <li>{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.fecha }}
+                <a href="{% url 'novedad_detail' object.id %}">Ver novedad</a>
+                <a href="{% url 'novedad_update' object.id %}">Modificar</a>
+                <a href="{% url 'novedad_delete' object.id %}">Eliminar</a>               
+            </li>
+        {% empty %}
             <p>No hay registros.</p>
-        {% endif %}
-    </div>
+        {% endfor %}
+    </ul>    
 {% endblock main %}

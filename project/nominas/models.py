@@ -1,6 +1,8 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from datetime import date
 from decimal import Decimal
+from django import forms  # Importar forms aquí
 
 class Empleado(models.Model):
     SEXO_CHOICES = [
@@ -25,7 +27,7 @@ class Empleado(models.Model):
     sexo_empleado = models.CharField(max_length=1, choices=SEXO_CHOICES)  # Elección entre Masculino y Femenino
     celular = models.CharField(max_length=30, blank=True, null=True)
     mail = models.CharField(max_length=50, blank=True, null=True)
-    fecha_de_nacimiento = models.DateField(auto_now_add=False, auto_now=False, verbose_name='Fecha de Nacimiento')
+    fecha_de_nacimiento = models.DateField(verbose_name='Fecha de Nacimiento')
     fecha_de_ingreso = models.DateField()
     fecha_de_egreso = models.DateField(blank=True, null=True)
     estado = models.CharField(max_length=1, choices=ESTADO_CHOICES)  # Elección entre Activo y Pasivo
@@ -35,12 +37,22 @@ class Empleado(models.Model):
     sueldo = models.DecimalField(max_digits=10, decimal_places=2)  # Sueldo en formato de moneda
 
     def clean(self):
+        # Validar que la fecha de ingreso no sea posterior a la fecha de egreso
         if self.fecha_de_egreso and self.fecha_de_ingreso > self.fecha_de_egreso:
             raise ValidationError('La fecha de ingreso no puede ser posterior a la fecha de egreso.')
+        
+        # Validar que el empleado sea mayor de 18 años
+        today = date.today()
+        age = today.year - self.fecha_de_nacimiento.year - ((today.month, today.day) < (self.fecha_de_nacimiento.month, self.fecha_de_nacimiento.day))
+        if age < 18:
+            raise ValidationError('El empleado debe ser mayor de 18 años.')
+        
         return super().clean()
-    
+
     def get_fecha_de_nacimiento_display(self):
-        return self.fecha_de_nacimiento.strftime("%d/%m/%Y")
+        if self.fecha_de_nacimiento:
+            return self.fecha_de_nacimiento.strftime("%d/%m/%Y")
+        return "Fecha no disponible"
 
     def __str__(self):
         return f'{self.nombre_empleado} {self.apellido_empleado} (Legajo: {self.nro_legajo}) - {self.puesto}'
@@ -52,7 +64,7 @@ class Novedad(models.Model):
         ('LI', 'Licencia'),
     ]
     
-    empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     tipo_novedad = models.CharField(max_length=2, choices=TIPO_NOVEDAD_CHOICES)  # Tipo de novedad
     descripcion = models.CharField(max_length=255, blank=True, null=True)  # Descripción adicional (opcional)
     fecha = models.DateField()
@@ -61,10 +73,25 @@ class Novedad(models.Model):
 
     def __str__(self):
         return f'Novedad de {self.empleado} - {self.get_tipo_novedad_display()} ({self.fecha})'
-    
-class Liquidacion(models.Model):
 
-    empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)
+
+class NovedadForm(forms.ModelForm):
+    class Meta:
+        model = Novedad
+        fields = ['empleado', 'tipo_novedad', 'descripcion', 'fecha', 'comentarios']  # Campos a incluir
+
+    def clean(self):
+        cleaned_data = super().clean()
+        empleado = cleaned_data.get('empleado')
+        fecha = cleaned_data.get('fecha')
+
+        if empleado and fecha:
+            if Novedad.objects.filter(empleado=empleado, fecha=fecha).exists():
+                raise forms.ValidationError("Ya existe una novedad para este legajo en la misma fecha.")
+
+
+class Liquidacion(models.Model):
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     periodo = models.CharField(max_length=7)  # Ejemplo: "09-2024" (mes y año)
     fecha_liquidacion = models.DateField(default=date.today)
     total_dias_ausencia = models.IntegerField(default=0)

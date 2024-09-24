@@ -13,4 +13,9 @@ urlpatterns = [
     path('liquidacion/detail/<int:pk>', views.liquidacion_detail, name="liquidacion_detail"),    
     path('empleado/update/<int:pk>', views.empleado_update, name="empleado_update"),
     path('liquidacion/update/<int:pk>', views.liquidacion_update, name="liquidacion_update"),  
+    path('empleado/delete/<int:pk>', views.empleado_delete, name="empleado_delete"),
+    path('liquidacion/delete/<int:pk>', views.liquidacion_delete, name="liquidacion_delete"),
+    path('novedad/update/<int:pk>', views.novedad_update, name="novedad_update"),  
+    path('novedad/delete/<int:pk>', views.novedad_delete, name="novedad_delete"),
+    path('novedad/detail/<int:pk>', views.novedad_detail, name="novedad_detail"),  
 ]

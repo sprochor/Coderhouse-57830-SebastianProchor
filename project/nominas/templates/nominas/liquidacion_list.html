@@ -18,6 +18,7 @@ Liquidaciones: Registro
             <li>{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.periodo }} 
                 <a href="{% url 'liquidacion_detail' object.id %}">Ver Liquidacion</a>
                 <a href="{% url 'liquidacion_update' object.id %}">Modificar</a>
+                <a href="{% url 'liquidacion_delete' object.id %}">Eliminar</a>               
             </li>
         {% empty %}
             <p>No hay registros.</p>

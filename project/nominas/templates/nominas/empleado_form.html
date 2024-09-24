@@ -1,7 +1,11 @@
 {% extends 'core/base.html' %}
 
 {% block header %}
-Empleados: Formulario
+    {% if form.instance.pk %}
+        Actualizando Legajo
+    {% else %}
+        Nuevo Legajo
+    {% endif %}
 {% endblock header %}
 
 {% block main %}

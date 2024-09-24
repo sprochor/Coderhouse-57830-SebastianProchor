@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Empleados: Eliminar Legajo
+{% endblock header %}
+
+{% block main %}
+    <p>Esta seguro que desea eliminar el legajo "{{ object.nro_legajo }}, {{ object.nombre_empleado }}, {{ object.apellido_empleado }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmo</button> 
+    </form>
+    <button>
+        <a href="{% url 'empleado_list' %}">Volver</a>
+    </button>
+{% endblock main %}

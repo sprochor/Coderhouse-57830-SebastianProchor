@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Empleados: Eliminar Novedad
+{% endblock header %}
+
+{% block main %}
+    <p>Esta seguro que desea eliminar esta Novedades "{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.tipo_novedad }}, {{ object.fecha }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmo</button> 
+    </form>
+    <button>
+        <a href="{% url 'novedad_list' %}">Volver</a>
+    </button>
+{% endblock main %}

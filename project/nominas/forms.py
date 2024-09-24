@@ -16,14 +16,34 @@ class EmpleadoForm(forms.ModelForm):
         if Empleado.objects.exclude(pk=pk).filter(dni=dni).exists():
             raise ValidationError(f'Ya existe un legajo para un empleado con el DNI {dni}.')
         
-        return dni 
+        return dni
+     
+    def clean_fecha_de_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data.get('fecha_de_nacimiento')
+        if fecha_nacimiento is None:
+            raise ValidationError("La fecha de nacimiento es obligatoria.")
+        return fecha_nacimiento
+    
+    def clean_fecha_de_ingreso(self):
+        fecha_ingreso = self.cleaned_data.get('fecha_de_ingreso')
+        if fecha_ingreso is None:
+            raise ValidationError("La fecha de ingreso es obligatoria.")
+        return fecha_ingreso
 
-class NovedadForm(forms.ModelForm):  
+class NovedadForm(forms.ModelForm):
     class Meta:
         model = Novedad
         fields = "__all__"
-        widgets = {'fecha': forms.DateInput(attrs={'type': 'date'})}
 
+    def clean(self):
+        cleaned_data = super().clean()
+        empleado = cleaned_data.get('empleado')
+        fecha = cleaned_data.get('fecha')
+
+        if empleado and fecha:
+            if Novedad.objects.filter(empleado=empleado, fecha=fecha).exists():
+                raise forms.ValidationError("Ya existe una novedad para este legajo en la misma fecha.")
+            
 class LiquidacionForm(forms.ModelForm):
     class Meta:
         model = Liquidacion
