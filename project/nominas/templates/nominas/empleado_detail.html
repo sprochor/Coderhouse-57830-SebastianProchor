@@ -23,6 +23,6 @@ Empleados: Vista de Legajo
         <li>Sueldo: {{ object.sueldo|floatformat:2 }}</li> <!-- Mostrar sueldo con dos decimales -->
     </ul>
     <button>
-        <a href="{% url 'empleado_list' %}">Volver</a>
+        <a href="{% url 'nominas:empleado_list' %}">Volver</a>
     </button>
 {% endblock main %}

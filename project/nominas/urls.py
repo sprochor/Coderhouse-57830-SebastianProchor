@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from nominas import views
 
+app_name = 'nominas'
+
 urlpatterns = [
     path("empleado/list", views.empleado_list, name="empleado_list"),
     path("novedad/list", views.novedad_list, name="novedad_list"),

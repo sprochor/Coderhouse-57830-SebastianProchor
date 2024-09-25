@@ -5,20 +5,20 @@ Liquidaciones: Registro
 {% endblock header %}
 
 {% block main %}
-    <form action="{% url 'liquidacion_list' %}" method="get">
+    <form action="{% url 'nominas:liquidacion_list' %}" method="get">
         <input type="text" name="q" placeholder="Buscar...">
         <button type="submit">Buscar</button>
     </form>
     <button>
-        <a href="{% url 'liquidacion_create' %}">Nueva Liquidacion</a>
+        <a href="{% url 'nominas:liquidacion_create' %}">Nueva Liquidacion</a>
     </button>
 
     <ul>
         {% for object in object_list %}
             <li>{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.periodo }} 
-                <a href="{% url 'liquidacion_detail' object.id %}">Ver Liquidacion</a>
-                <a href="{% url 'liquidacion_update' object.id %}">Modificar</a>
-                <a href="{% url 'liquidacion_delete' object.id %}">Eliminar</a>               
+                <a href="{% url 'nominas:liquidacion_detail' object.id %}">Ver Liquidacion</a>
+                <a href="{% url 'nominas:liquidacion_update' object.id %}">Modificar</a>
+                <a href="{% url 'nominas:liquidacion_delete' object.id %}">Eliminar</a>               
             </li>
         {% empty %}
             <p>No hay registros.</p>

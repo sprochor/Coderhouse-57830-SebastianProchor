@@ -1,7 +1,20 @@
 <navbar style="display: flex; justify-content: center;">
-    <button><a href="{% url 'index' %}">Home</a></button>
-    <button><a href="{% url 'empleado_list' %}">Legajos</a></button>
-    <button><a href="{% url 'novedad_list' %}">Novedades</a></button>
-    <button><a href="{% url 'liquidacion_list' %}">liquidaciones</a></button>
-    <button><a href="#">About</a></button>
+    <button><a href="{% url 'core:index' %}">Home</a></button>
+    {% if user.is_authenticated %}
+
+        <button><a href="{% url 'nominas:empleado_list' %}">Legajos</a></button>
+        <button><a href="{% url 'nominas:novedad_list' %}">Novedades</a></button>
+        <button><a href="{% url 'nominas:liquidacion_list' %}">liquidaciones</a></button>
+        <button><a href="#">About</a></button>
+        <button><a href="#">{{ user.username }}</a></button>
+        <form action="{% url 'core:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+        
+    {% else %}
+
+        <button><a href="{% url 'core:login' %}">Login</a></button>
+            
+    {% endif %}
 <navbar>

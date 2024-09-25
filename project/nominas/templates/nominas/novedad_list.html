@@ -5,12 +5,12 @@ Novedad: Registro
 {% endblock header %}
 
 {% block main %}
-    <form action="{% url 'novedad_list' %}" method="get">
+    <form action="{% url 'nominas:novedad_list' %}" method="get">
         <input type="text" name="q" placeholder="Buscar...">
         <button type="submit">Buscar</button>
     </form>
     <button>
-        <a href="{% url 'novedad_create' %}" style="text-decoration:none;">
+        <a href="{% url 'nominas:novedad_create' %}" style="text-decoration:none;">
             <button type="button">Nueva novedad</button>
         </a>
     </button>
@@ -18,9 +18,9 @@ Novedad: Registro
     <ul>
         {% for object in object_list %}
             <li>{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.fecha }}
-                <a href="{% url 'novedad_detail' object.id %}">Ver novedad</a>
-                <a href="{% url 'novedad_update' object.id %}">Modificar</a>
-                <a href="{% url 'novedad_delete' object.id %}">Eliminar</a>               
+                <a href="{% url 'nominas:novedad_detail' object.id %}">Ver novedad</a>
+                <a href="{% url 'nominas:novedad_update' object.id %}">Modificar</a>
+                <a href="{% url 'nominas:novedad_delete' object.id %}">Eliminar</a>               
             </li>
         {% empty %}
             <p>No hay registros.</p>
