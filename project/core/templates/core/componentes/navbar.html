@@ -1,20 +1,16 @@
-<navbar style="display: flex; justify-content: center;">
-    <button><a href="{% url 'core:index' %}">Home</a></button>
+<nav style="display: flex; justify-content: center;">
+    <a href="{% url 'core:index' %}" style="text-decoration: none;"><button>Home</button></a>
     {% if user.is_authenticated %}
-
-        <button><a href="{% url 'nominas:empleado_list' %}">Legajos</a></button>
-        <button><a href="{% url 'nominas:novedad_list' %}">Novedades</a></button>
-        <button><a href="{% url 'nominas:liquidacion_list' %}">liquidaciones</a></button>
-        <button><a href="#">About</a></button>
-        <button><a href="#">{{ user.username }}</a></button>
-        <form action="{% url 'core:logout' %}" method="post">
+        <a href="{% url 'nominas:empleado_list' %}" style="text-decoration: none;"><button>Legajos</button></a>
+        <a href="{% url 'nominas:novedad_list' %}" style="text-decoration: none;"><button>Novedades</button></a>
+        <a href="{% url 'nominas:liquidacion_list' %}" style="text-decoration: none;"><button>Liquidaciones</button></a>
+        <a href="#" style="text-decoration: none;"><button>About</button></a>
+        <a href="{% url 'core:profile' %}" style="text-decoration: none;"><button>{{ user.username }}</button></a>
+        <a href="{% url 'core:register' %}" style="text-decoration: none;"><button>Crear Usuario</button></a>
+        <form action="{% url 'core:logout' %}" method="post" style="margin: 0;">
             {% csrf_token %}
             <button type="submit">Logout</button>
-        </form>
-        
     {% else %}
-
-        <button><a href="{% url 'core:login' %}">Login</a></button>
-            
+        <a href="{% url 'core:login' %}" style="text-decoration: none;"><button>Login</button></a>
     {% endif %}
-<navbar>
+</nav>
