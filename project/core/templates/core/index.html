@@ -1,9 +1,26 @@
-{% extends 'core/base.html' %}
-
-{% block header %}
-Proyecto Administracion de Nominas
-{% endblock header %}
-
-{% block main %}
-
-{% endblock main %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Proyecto Administracion de Nominas{% endblock title %}</title>
+    
+    {% load static %}  <!-- Asegúrate de cargar estáticos aquí -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Pryecto de nominas{% endblock header %}</h1>
+    </header>
+    <nav style="text-align: center;">
+        {% include 'core/componentes/navbar.html' %}
+    </nav>
+    <main style="text-align: center;">
+        {% block main %}
+        {% endblock main %}
+    </main>
+    <footer>
+        {% include 'core/componentes/footer.html' %}
+    </footer>
+</body>
+</html>

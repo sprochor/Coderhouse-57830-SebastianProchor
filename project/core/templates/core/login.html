@@ -5,11 +5,17 @@
 {% endblock header %}
 
 {% block main %}
-    <form  method="post">
+    <h2>Iniciar Sesión</h2>
+    <form method="post" class="login-form">
         {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <button type="submit">Iniciar sesion</button>
+        <div class="form-group">
+            {{ form.username.label }} 
+            {{ form.username }} 
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}  
+            {{ form.password }}
+        </div>
+        <button type="submit" class="btn">Iniciar Sesión</button>
     </form>
 {% endblock main %}

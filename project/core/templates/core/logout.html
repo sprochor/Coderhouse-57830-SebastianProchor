@@ -5,7 +5,6 @@
 {% endblock header %}
 
 {% block main %}
-    <p>Usuario Creado.</p>
-    <button type="submit"><a href="{% url 'core:index' %}">ok</a></button>
-    </form>
+    <p>Has cerrado sesión correctamente.</p>
+    <button type="submit"><a href="{% url 'core:login' %}">Volver a iniciar sesión</a></button>
 {% endblock main %}

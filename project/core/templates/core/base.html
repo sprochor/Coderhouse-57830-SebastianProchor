@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto Administracion de Nominas</title>
+    <title>Proyecto Administración de Nóminas</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <header>
-        <h1 style="color: blue; text-align: center;">
-        {% block header %}
-        {% endblock header %}
-        </h1>
+        <h1>Administración de Nóminas</h1>
     </header>
-    <nav style="text-align: center;">
+    <nav>
         {% include 'core/componentes/navbar.html' %}
     </nav>
-    <main style="text-align: center;">
+    <main>
         {% block main %}
         {% endblock main %}
     </main>
@@ -24,3 +23,6 @@
     </footer>
 </body>
 </html>
+
+
+

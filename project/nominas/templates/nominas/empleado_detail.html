@@ -10,7 +10,7 @@ Empleados: Vista de Legajo
         <li>Nombre: {{ object.nombre_empleado }}</li>
         <li>Apellido: {{ object.apellido_empleado }}</li>
         <li>DNI: {{ object.dni }}</li>
-        <li>Sexo: {{ object.get_sexo_empleado_display }}</li> <!-- Usar get_*_display para mostrar el valor elegido -->
+        <li>Sexo: {{ object.get_sexo_empleado_display }}</li> <!---->
         <li>Celular: {{ object.celular }}</li>
         <li>Email: {{ object.mail }}</li>
         <li>Fecha de Nacimiento: {{ object.fecha_de_nacimiento }}</li>
@@ -20,7 +20,15 @@ Empleados: Vista de Legajo
         <li>Nacionalidad: {{ object.nacionalidad }}</li>
         <li>Modalidad de Contratación: {{ object.get_mod_contratacion_display }}</li>
         <li>Puesto: {{ object.puesto }}</li>
-        <li>Sueldo: {{ object.sueldo|floatformat:2 }}</li> <!-- Mostrar sueldo con dos decimales -->
+        <li>Sueldo: {{ object.sueldo|floatformat:2 }}</li>
+        <li>
+            Avatar:
+            {% if object.avatar %}
+                <img src="{{ object.avatar.url }}" alt="Avatar de {{ object.nombre_empleado }}" style="width: 100px; height: auto;">
+            {% else %}
+                <p>No hay imagen disponible.</p>
+            {% endif %}
+        </li>
     </ul>
     <button>
         <a href="{% url 'nominas:empleado_list' %}">Volver</a>

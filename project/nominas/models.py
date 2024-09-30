@@ -2,7 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date
 from decimal import Decimal
-from django import forms  # Importar forms aquí
+from django import forms
+import calendar
 
 class Empleado(models.Model):
     SEXO_CHOICES = [
@@ -34,7 +35,8 @@ class Empleado(models.Model):
     nacionalidad = models.CharField(max_length=100)  # Campo para ingresar el país a mano
     mod_contratacion = models.CharField(max_length=1, choices=MOD_CONTRATACION_CHOICES, blank=True, null=True)  # Elección entre Temporal y Permanente
     puesto = models.CharField(max_length=100)
-    sueldo = models.DecimalField(max_digits=10, decimal_places=2)  # Sueldo en formato de moneda
+    sueldo = models.DecimalField(max_digits=10, decimal_places=2)
+    avatar = models.ImageField(upload_to='avatares', blank=True, null=True)
 
     def clean(self):
         # Validar que la fecha de ingreso no sea posterior a la fecha de egreso
@@ -99,9 +101,10 @@ class Liquidacion(models.Model):
     fecha_pago = models.DateField()
 
     def calcular_total_liquidacion(self):
-        # Sueldo diario
+        # Sueldo diario (siempre basado en 30 días)
         sueldo_diario = self.empleado.sueldo / 30 if self.empleado.sueldo > 0 else 0
-        
+        print(f'Sueldo: {self.empleado.sueldo}, Sueldo Diario: {sueldo_diario}')
+
         # Días de ausencia cargados como "Novedad" para el empleado en el período
         ausencias = Novedad.objects.filter(
             empleado=self.empleado,
@@ -110,22 +113,40 @@ class Liquidacion(models.Model):
             fecha__month=int(self.periodo.split('-')[0])
         ).count()
 
-        # Calcula el sueldo bruto descontando los días de ausencia
-        sueldo_bruto = (30 - ausencias) * sueldo_diario if sueldo_diario > 0 else 0
+        # Obtener fecha de ingreso
+        fecha_ingreso = self.empleado.fecha_de_ingreso
+
+        # Inicializar días trabajados
+        dias_trabajados = 30  # Siempre 30 días como base
+
+        ultimo_dia_mes = calendar.monthrange(fecha_ingreso.year, fecha_ingreso.month)[1]
+        dias_trabajados = ultimo_dia_mes - fecha_ingreso.day + 1  # Sumamos 1 para incluir el día de ingreso
+
+        # Días trabajados después de restar ausencias
+        dias_trabajados -= ausencias
+        print(f'Ausencias: {ausencias}, Días Trabajados: {dias_trabajados}')
+
+        # Calcular el sueldo bruto descontando los días no trabajados
+        sueldo_bruto = dias_trabajados * sueldo_diario if sueldo_diario > 0 else 0
+        print(f'Sueldo Bruto: {sueldo_bruto}')
 
         # Aplicar descuentos
         jubilacion = sueldo_bruto * Decimal('0.11')  # 11% de descuento para jubilación
         ley_19032 = sueldo_bruto * Decimal('0.03')  # 3% para ley 19032
         obra_social = sueldo_bruto * Decimal('0.03')  # 3% para obra social
 
+        print(f'Jubilación: {jubilacion}, Ley 19032: {ley_19032}, Obra Social: {obra_social}')
+
         # Sueldo neto después de los descuentos
         sueldo_neto = sueldo_bruto - (jubilacion + ley_19032 + obra_social)
+        print(f'Sueldo Neto: {sueldo_neto}')
 
         return sueldo_neto
 
     def save(self, *args, **kwargs):
         # Calculamos la liquidación antes de guardarla
         self.total_liquidacion = self.calcular_total_liquidacion()
+
         # Guardamos el total de ausencias en el campo correspondiente
         self.total_dias_ausencia = Novedad.objects.filter(
             empleado=self.empleado,
@@ -133,6 +154,7 @@ class Liquidacion(models.Model):
             fecha__year=int(self.periodo.split('-')[1]),
             fecha__month=int(self.periodo.split('-')[0])
         ).count()
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -140,6 +162,6 @@ class Liquidacion(models.Model):
         sueldo_neto = self.total_liquidacion
         return (
             f'Liquidación {self.periodo} - {self.empleado.nombre_empleado} {self.empleado.apellido_empleado} '
-            f'(Legajo: {self.empleado.nro_legajo}) - Días trabajados: {30 - self.total_dias_ausencia} - Sueldo bruto: {self.empleado.sueldo:.2f} - '
-            f'Ausencias: {self.total_dias_ausencia} - Sueldo neto: {sueldo_neto:.2f}'
+            f'(Legajo: {self.empleado.nro_legajo}) - Días trabajados: {30 - self.total_dias_ausencia} - '
+            f'Sueldo bruto: {self.empleado.sueldo:.2f} - Ausencias: {self.total_dias_ausencia} - Sueldo neto: {sueldo_neto:.2f}'
         )

@@ -9,12 +9,9 @@ Novedad: Registro
         <input type="text" name="q" placeholder="Buscar...">
         <button type="submit">Buscar</button>
     </form>
-    <button>
-        <a href="{% url 'nominas:novedad_create' %}" style="text-decoration:none;">
+        <a href="{% url 'nominas:novedad_form' %}" style="text-decoration:none;">
             <button type="button">Nueva novedad</button>
         </a>
-    </button>
-
     <ul>
         {% for object in object_list %}
             <li>{{ object.empleado.nro_legajo }}, {{ object.empleado.nombre_empleado }}, {{ object.empleado.apellido_empleado }}, {{ object.fecha }}

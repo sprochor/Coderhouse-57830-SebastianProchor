@@ -10,11 +10,18 @@ Liquidación de Empleado: Detalle
         <li>Nombre: {{ object.empleado.nombre_empleado }}</li>
         <li>Apellido: {{ object.empleado.apellido_empleado }}</li>
         <li>Periodo: {{ object.periodo }}</li>
-        <li>Total Días de Ausencia: {{ object.total_dias_ausencia }}</li>
-        <li>Total Liquidación (Sueldo Neto): ${{ object.total_liquidacion|floatformat:2 }}</li> <!-- Mostrar el sueldo con dos decimales -->
+        <li>Sueldo Bruto: ${{ object.empleado.sueldo|floatformat:2 }}</li>
+        <li>Días Trabajados: {{ dias_trabajados }}</li>
+        <li>Monto Resta Ingreso: ${{ monto_resta_ingreso|floatformat:2 }}</li>
+        <li>Monto Resta Ausencias: ${{ monto_resta_ausencias|floatformat:2 }}</li>
+        <li>Descuento Jubilación: ${{ descuento_jubilacion|floatformat:2 }}</li>
+        <li>Descuento Obra Social: ${{ descuento_obra_social|floatformat:2 }}</li>
+        <li>Descuento Ley 19032: ${{ descuento_ley_19032|floatformat:2 }}</li>
+        <li>Total Liquidación (Sueldo Neto): ${{ object.total_liquidacion|floatformat:2 }}</li>
         <li>Fecha de Pago: {{ object.fecha_pago }}</li>
     </ul>
     <button>
         <a href="{% url 'nominas:liquidacion_list' %}">Volver</a>
     </button>
 {% endblock main %}
+

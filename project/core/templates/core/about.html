@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+Acerca de Sebastián Prochor
+{% endblock header %}
+
+{% block main %}
+    <h2>Información Personal</h2>
+    <p>Mi nombre es Sebastián Prochor, soy licenciado en Relaciones del Trabajo, con un posgrado en Recursos Humanos.</p>
+    <p>Actualmente estoy terminando el curso de Python en Coderhouse.</p>
+    <p>Mi meta es poder combinar mi formacion con la programacion y el manejo de datos</p>
+    
+    <h2>Descripción del Proyecto</h2>
+    <p>Este proyecto es una aplicación para administrar nóminas de recursos humanos y la liquidación de sueldos. 
+       Tiene varias secciones:
+    </p>
+    <ul>
+        <li><strong>Legajos:</strong> Puedes ver, crear y editar legajos.</li>
+        <li><strong>Novedades:</strong> Se pueden agregar novedades a cada legajo, como ausencias.</li>
+        <li><strong>Liquidación:</strong> Se liquida el sueldo mensual, considerando ausencias y cambios de ingreso o egreso.</li>
+    </ul>
+    
+    <h2>Mejoras Futuras</h2>
+    <p>Planeo realizar las siguientes mejoras en el proyecto:</p>
+    <ul>
+        <li>Separar el legajo según datos básicos, domicilio, centro de costo, cuenta bancaria, obra social, y puesto/sueldo.</li>
+        <li>Cargar todo tipo de ausencias, licencias y novedades como horas extras en el campo de novedades.</li>
+        <li>Detallar más la liquidación y generar recibos de sueldo en formato PDF.</li>
+        <li>Crear una nueva app para editar y parametrizar tablas como países, bancos, obras sociales, puestos, aportes y contribuciones.</li>
+    </ul>
+
+    <h2>Contacto</h2>
+    <p>Puedes encontrarme en LinkedIn: <a href="https://www.linkedin.com/in/sebastian-prochor-25639113/">Sebastián Prochor</a>.</p>
+{% endblock main %}
+
