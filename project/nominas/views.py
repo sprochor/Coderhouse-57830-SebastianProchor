@@ -88,12 +88,12 @@ def liquidacion_detail(request, pk):
 
     # Calcular sueldo bruto y descuentos
     sueldo_bruto = dias_trabajados * sueldo_diario if sueldo_diario > 0 else 0
-    jubilacion = sueldo_bruto * Decimal('0.11')
-    obra_social = sueldo_bruto * Decimal('0.03')
-    ley_19032 = sueldo_bruto * Decimal('0.03')
+    jubilacion = sueldo_bruto * -Decimal('0.11')
+    obra_social = sueldo_bruto * -Decimal('0.03')
+    ley_19032 = sueldo_bruto * -Decimal('0.03')
 
     # Sueldo neto
-    sueldo_neto = sueldo_bruto - (jubilacion + obra_social + ley_19032)
+    sueldo_neto = (sueldo_diario * dias_trabajados) - (jubilacion + obra_social + ley_19032)
 
     # Contexto para la plantilla
     context = {
@@ -102,8 +102,8 @@ def liquidacion_detail(request, pk):
         'descuento_obra_social': obra_social,
         'descuento_ley_19032': ley_19032,
         'dias_trabajados': dias_trabajados, 
-        'monto_resta_ingreso': (dias_trabajados + ausencias) * sueldo_diario,  # Lógica para el monto de ingreso
-        'monto_resta_ausencias': ausencias * sueldo_diario,  # Lógica para el monto de ausencias
+        'monto_resta_ingreso': (dias_trabajados + ausencias - 30) * sueldo_diario,  # Lógica para el monto de ingreso
+        'monto_resta_ausencias': ausencias * -sueldo_diario,  # Lógica para el monto de ausencias
     }
 
     return render(request, 'nominas/liquidacion_detail.html', context)

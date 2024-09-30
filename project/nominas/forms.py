@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from .models import Empleado, Novedad, Liquidacion
 import re
+from datetime import datetime
 
 class EmpleadoForm(forms.ModelForm):
     class Meta:
@@ -64,9 +65,19 @@ class LiquidacionForm(forms.ModelForm):
         empleado = cleaned_data.get('empleado')
         periodo = cleaned_data.get('periodo')
 
-        if empleado.fecha_de_egreso and empleado.fecha_de_egreso < periodo:
-            raise ValidationError(f'El empleado {empleado} ya no estaba activo en el periodo {periodo}.')
+        # Verificar si el empleado tiene fecha de egreso
+        if empleado.fecha_de_egreso:
+            # Convertir el periodo en una fecha de tipo datetime para poder compararlo con fecha_de_egreso
+            try:
+                periodo_date = datetime.strptime(f'01-{periodo}', '%d-%m-%Y').date()  # Agregamos el día para que sea una fecha válida
+            except ValueError:
+                raise ValidationError(f'El formato del periodo {periodo} es inválido.')
 
+            # Comparar solo si fecha_de_egreso no es None
+            if empleado.fecha_de_egreso < periodo_date:
+                raise ValidationError(f'El empleado {empleado} ya no estaba activo en el periodo {periodo}.')
+        
+        # Verificar si ya existe una liquidación para este empleado en el mismo periodo
         if Liquidacion.objects.filter(empleado=empleado, periodo=periodo).exists():
             raise ValidationError(f'Ya existe una liquidación para {empleado} en el periodo {periodo}.')
         

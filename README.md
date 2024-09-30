@@ -16,3 +16,4 @@ Expansión del Campo de Novedades: Incluir más tipos de ausencias, licencias y 
 Liquidación Detallada: Implementar una liquidación más detallada y generar recibos de sueldo en formato PDF.
 Nueva Aplicación de Tablas: Crear una nueva app para editar y parametrizar tablas como países, bancos, obras sociales, puestos, aportes y contribuciones entre otros.
 
+VIDEO: https://youtu.be/NkDGEceoJ4M
